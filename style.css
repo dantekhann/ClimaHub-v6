@@ -220,3 +220,21 @@ input:focus {
   color: var(--texto-secundario);
   margin-top: 10px;
 }
+
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #a8a8b3;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer a {
+  color: #00d2ff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
