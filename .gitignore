@@ -1,0 +1,9 @@
+# Configurações sensíveis (onde você guarda URLs ou chaves)
+config.js
+
+# Pastas de ferramentas de desenvolvimento (como o Qodo que vi no seu print)
+.qodo/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaHub - Tempo Real</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Clima<span style="color: #00d2ff;">Hub</span></h1>
+        
+        <div class="input-group">
+            <input type="text" id="cidadeInput" placeholder="Busque uma cidade..." autocomplete="off">
+            <button id="btnVerificar" onclick="buscarClimaReal()">Adicionar</button>
+        </div>
+
+        <div id="notificacao-container"></div>
+
+        <div id="controles-painel" style="display: none;">
+            <button id="btnAlternarUnidade" onclick="alternarUnidade()">Mudar para °F</button>
+            <button id="btnLimparTudo" onclick="limparTodaMemoria()">Limpar Painel</button>
+        </div>
+
+        <div id="weather-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
