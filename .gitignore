@@ -1,9 +1,21 @@
-# Pastas de configuração do VS Code
+# Pastas de ambiente e editores
 .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Arquivos temporários do sistema
+# Arquivos de sistema (Mac e Windows)
 .DS_Store
 Thumbs.db
 
-# Pastas de ferramentas de análise (se estiver usando)
-.qodo/
+# Logs de erro
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Se você usar algum dia pacotes do Node.js
+node_modules/
+dist/
