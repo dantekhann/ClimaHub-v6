@@ -1,59 +1,56 @@
-ClimaHub v5: Dashboard Multi-Localidade & Inteligência Geográfica
-O ClimaHub é uma aplicação front-end de monitoramento meteorológico em tempo real. A versão 5 marca a maturidade do projeto, evoluindo de uma ferramenta de busca simples para um painel de comparação persistente, capaz de gerenciar múltiplas localidades simultaneamente com tratamento avançado de dados geográficos e cache inteligente.
+ClimaHub v6: Dashboard Multi-Localidade & Segurança Avançada
+O ClimaHub é uma aplicação front-end de monitoramento meteorológico em tempo real. A versão 6 consolida o projeto como uma aplicação robusta, introduzindo inteligência de previsão, segurança contra ataques e uma arquitetura de arquivos profissional.
 
-🚀 O que há de novo na v5?
-Diferente das versões anteriores que exibiam apenas um resultado por vez, o ClimaHub agora opera como um Dashboard de Comparação.
+🚀 O que há de novo na v6?
+Diferente da v5, esta versão foca em resiliência de dados e proteção de código, além de expandir a visão meteorológica do usuário.
 
-1. Sistema de Grid Dinâmico e Controle Unificado
-Multi-Cards: Adicione várias cidades simultaneamente para comparação direta de temperatura, vento e condições climáticas.
+🛡️ Segurança e Conformidade (Padrão Profissional)
+Blindagem contra XSS (Cross-Site Scripting): Substituição total de .innerHTML por métodos seguros (createElement, textContent e append). O app agora é imune a injeções de scripts maliciosos.
 
-Controles Sincronizados: O painel de controles (Alternar Unidade e Limpar Painel) agora utiliza um layout lado a lado, otimizando o espaço vertical e aparecendo dinamicamente apenas quando há dados no grid.
+Sanitização Dinâmica de Busca: Uso de Regex avançada para permitir buscas ou nomes com hífens, limpando caracteres perigosos sem perder a precisão geográfica.
 
-Gerenciamento Individual: Botões de remoção (✕) em cada card para gestão precisa do painel.
+Atribuição Legal: Implementação de créditos de API (Open-Meteo) em conformidade com as políticas de uso de dados abertos.
 
-2. Memória Inteligente (Cache de 1 Hora)
-Persistência com LocalStorage: As cidades permanecem salvas mesmo após o fechamento do navegador ou atualização da página (F5).
+📅 Previsão Estendida e Robustez Visual
+Forecast de 3 Dias: Adição de uma nova seção em cada card que exibe a previsão de temperatura e condições climáticas para os próximos três dias.
 
-Auto-Faxina (TTL - Time to Live): Implementamos uma lógica de expiração. Cidades com dados em cache há mais de 60 minutos são removidas automaticamente para garantir a relevância das informações.
+Tratamento de Erros Silenciosos (Graceful Degradation): Se a API falhar ou a internet oscilar, o card entra em "Modo de Erro" visual, oferecendo um botão de "Tentar Novamente" sem quebrar o restante do dashboard.
 
-3. Inteligência Geográfica e Resiliência de Busca
-Resolução de Homônimos: Ao buscar cidades com nomes comuns, o sistema apresenta uma lista seletiva detalhando Estado/Província e País.
+Ajuste de Timezone Automática: A previsão utiliza o fuso horário local de cada cidade buscada, garantindo que os dias da semana estejam sempre corretos.
 
-Tratamento de Nomes Compostos: Lógica de busca resiliente que aceita nomes com hífens ou caracteres especiais (ex: São-Tomé), incluindo um sistema de "fallback" (plano B) caso a API retorne vazio na primeira tentativa.
+📂 Arquitetura de Pastas Profissional
+O projeto foi fragmentado para seguir as melhores práticas de organização de ativos:
 
-Hierarchy-Display: Exibição clara da hierarquia geográfica completa em cada card.
+/css: Centraliza o style.css e regras de layout.
 
-4. Robustez Visual e UI/UX
-Anti-Quebra de Layout: Implementação de word-wrap e line-clamp para nomes de cidades extremamente longos.
+/js: Centraliza o script.js e a lógica de processamento.
 
-Inversão de Hierarquia Visual: A temperatura agora possui prioridade visual máxima, posicionada no topo do corpo do card.
-
-Feedback Visual: Modo Dia/Noite automático (☀️/🌙) e bordas dinâmicas coloridas de acordo com o código de condição climática.
+.gitignore: Implementado para manter o repositório limpo de arquivos de sistema (DS_Store/Thumbs.db) e configurações de editores (.vscode).
 
 🧠 Lógica Técnica
-Sanitização Dinâmica: Uso de Regex para limpar inputs sem corromper caracteres essenciais (como hífens em nomes de cidades).
+Modularização de Funções: A renderização dos cards foi separada da lógica de previsão (criarElementoPrevisao), facilitando manutenções futuras.
 
-Arquitetura de Dados: O LocalStorage armazena metadados e coordenadas; os dados meteorológicos são sempre requisitados em tempo real no carregamento para garantir precisão absoluta.
+Circuit Breaker: Validação de dados de entrada na conversão de temperatura para evitar erros de cálculo (NaN).
 
-Estética: Estilo Glassmorphism sobre fundo escuro (#0b0b0c) para reduzir fadiga visual e proporcionar um visual premium.
+Layout Flexbox: Otimização do container de previsão para manter o alinhamento vertical e horizontal, independentemente do tamanho do nome da localidade.
 
 📂 Estrutura do Projeto
-index.html: Dashboard estruturado com containers separados para notificações de busca e grid de cards.
+index.html: Porta de entrada com as novas rotas para pastas de assets.
 
-style.css: Design responsivo, animações de entrada (slideUp) e controle fino de espaçamentos (gap control).
+css/style.css: Design responsivo com suporte à nova seção de previsão e estados de erro.
 
-script.js: Engine principal que gerencia a Fetch API (Open-Meteo), persistência de dados e lógica de expiração.
+js/script.js: Engine principal com tratamento de try/catch, lógica de busca refinada e sanitização de saída.
 
 🔧 Como utilizar
-Busque por uma cidade no campo de pesquisa.
+Busque por uma cidade (ex: "Brasília" ou "Londres, GB").
 
-Se houver mais de um resultado (homônimos), selecione a opção correta na lista.
+Selecione a localidade correta na lista de homônimos.
 
-O card será fixado no painel. Você pode adicionar quantos desejar.
+O card exibirá a temperatura atual e a previsão para os próximos 3 dias.
 
-Utilize os botões de controle centrais para alternar entre °C/°F ou limpar todo o histórico.
+Em caso de falha de conexão, utilize o botão "Tentar Novamente" no card afetado.
 
-Para limpar tudo, utilize o botão "Limpar Histórico" que surge ao final do grid.
+Use os botões centrais para alternar a unidade global de temperatura.
 
 👤 Desenvolvedor: Paulo Dante Coelho Neto
 
