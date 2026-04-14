@@ -73,17 +73,34 @@ async function buscarClimaReal() {
     const lista = notificacao.querySelector(".lista-selecao");
 
     resultados.forEach((local) => {
+      // 1. Criamos o container do item
       const item = document.createElement("div");
       item.className = "item-local";
-      const estado = local.admin1 ? `${local.admin1}, ` : "";
-      item.innerHTML = `<strong>${local.name}</strong> <br> <small style="color:#666">${estado}${local.country}</small>`;
 
+      // 2. Criamos o nome da cidade em negrito (Seguro contra XSS)
+      const nomeCidade = document.createElement("strong");
+      nomeCidade.textContent = local.name;
+
+      // 3. Criamos a quebra de linha
+      const quebra = document.createElement("br");
+
+      // 4. Criamos o texto menor com o Estado e País
+      const infoGeografica = document.createElement("small");
+      infoGeografica.style.color = "#666";
+      const estado = local.admin1 ? `${local.admin1}, ` : "";
+      infoGeografica.textContent = `${estado}${local.country}`;
+
+      // 5. Colocamos tudo dentro do item (na ordem correta)
+      item.append(nomeCidade, quebra, infoGeografica);
+
+      // 6. Lógica de clique para selecionar a cidade
       item.onclick = () => {
         salvarCidadeNaMemoria(local);
         adicionarCardAoGrid(local);
-        notificacao.innerHTML = "";
+        notificacao.innerHTML = ""; // Aqui pode limpar com string vazia sem problemas
         input.value = "";
       };
+
       lista.appendChild(item);
     });
   } catch (e) {
@@ -161,6 +178,7 @@ function atualizarVisibilidadeControles() {
 }
 
 // --- RENDERIZAÇÃO DO CARD ---
+// --- RENDERIZAÇÃO SEGURA DO CARD ---
 async function adicionarCardAoGrid(local) {
   const container = document.getElementById("weather-container");
   try {
@@ -183,19 +201,45 @@ async function adicionarCardAoGrid(local) {
     card.style.borderTop = `5px solid ${config.color}`;
     card.setAttribute("data-temp-c", data.temperature);
 
-    card.innerHTML = `
-            <button class="btn-fechar" onclick="removerDaMemoria(${local.latitude}, ${local.longitude}, this.parentElement)">✕</button>
-            <h2 style="margin: 0;">${local.name}</h2>
-            <p class="local-info">${subLocal}</p>
-            <div class="temp-grande" style="color: ${config.color}">${converterValor(data.temperature)}°${unidadeAtual}</div>
-            <div style="font-size: 1.8rem; margin: 15px 0;">${emojiEstado}</div>
-            <p style="font-weight: bold;">${config.label} ${config.icon}</p>
-            <p class="vento-texto">Vento: ${data.windspeed} km/h</p>
-        `;
+    // CRIANDO ELEMENTOS DE FORMA SEGURA (XSS PROOF)
+    const btnFechar = document.createElement("button");
+    btnFechar.className = "btn-fechar";
+    btnFechar.textContent = "✕";
+    btnFechar.onclick = () =>
+      removerDaMemoria(local.latitude, local.longitude, card);
+
+    const titulo = document.createElement("h2");
+    titulo.style.margin = "0";
+    titulo.textContent = local.name; // SEGURO: Mesmo que o nome seja um script, ele aparece como texto.
+
+    const pLocal = document.createElement("p");
+    pLocal.className = "local-info";
+    pLocal.textContent = subLocal;
+
+    const divTemp = document.createElement("div");
+    divTemp.className = "temp-grande";
+    divTemp.style.color = config.color;
+    divTemp.textContent = `${converterValor(data.temperature)}°${unidadeAtual}`;
+
+    const divEmoji = document.createElement("div");
+    divEmoji.style.fontSize = "1.8rem";
+    divEmoji.style.margin = "15px 0";
+    divEmoji.textContent = emojiEstado;
+
+    const pEstado = document.createElement("p");
+    pEstado.style.fontWeight = "bold";
+    pEstado.textContent = `${config.label} ${config.icon}`;
+
+    const pVento = document.createElement("p");
+    pVento.className = "vento-texto";
+    pVento.textContent = `Vento: ${data.windspeed} km/h`;
+
+    // Montando o card (Append)
+    card.append(btnFechar, titulo, pLocal, divTemp, divEmoji, pEstado, pVento);
 
     container.appendChild(card);
     atualizarVisibilidadeControles();
   } catch (e) {
-    console.error("Erro ao carregar clima para", local.name);
+    console.error("Erro ao carregar clima.");
   }
 }
