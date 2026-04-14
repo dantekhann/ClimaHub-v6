@@ -238,3 +238,34 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+/* Container que segura os 3 dias */
+.forecast-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px; /* Cria o espaço entre os dias */
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cada dia individual (QUA, QUI, SEX) */
+.forecast-day {
+  display: flex;
+  flex-direction: column; /* Coloca Nome, Icon e Temp um embaixo do outro */
+  align-items: center;
+  gap: 5px; /* Espaço entre o nome do dia, o ícone e a temperatura */
+  flex: 1;
+}
+
+.forecast-day span {
+  font-size: 0.75rem;
+  color: #a8a8b3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.forecast-temp {
+  font-weight: bold;
+  font-size: 0.9rem;
+}

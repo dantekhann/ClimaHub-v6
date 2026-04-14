@@ -182,64 +182,84 @@ function atualizarVisibilidadeControles() {
 async function adicionarCardAoGrid(local) {
   const container = document.getElementById("weather-container");
   try {
+    // 1. Chamada atualizada: pedimos a temperatura máxima e o código do tempo diário
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${local.latitude}&longitude=${local.longitude}&current_weather=true`,
+      `https://api.open-meteo.com/v1/forecast?latitude=${local.latitude}&longitude=${local.longitude}&current_weather=true&daily=weathercode,temperature_2m_max&timezone=auto`
     );
     const clm = await res.json();
-    const data = clm.current_weather;
+    const current = clm.current_weather;
+    const daily = clm.daily; // Dados dos próximos dias
 
-    const config = weatherConfig[data.weathercode] || {
-      label: "Estável",
-      icon: "🌤️",
-      color: "#00d2ff",
-    };
-    const emojiEstado = data.is_day === 1 ? "☀️" : "🌙";
-    const subLocal = `${local.admin1 ? local.admin1 + ", " : ""}${local.country}`;
+    const config = weatherConfig[current.weathercode] || { label: "Estável", icon: "🌤️", color: "#00d2ff" };
+    const emojiEstado = current.is_day === 1 ? "☀️" : "🌙";
 
     const card = document.createElement("div");
     card.className = "weather-box";
     card.style.borderTop = `5px solid ${config.color}`;
-    card.setAttribute("data-temp-c", data.temperature);
+    card.setAttribute("data-temp-c", current.temperature);
 
-    // CRIANDO ELEMENTOS DE FORMA SEGURA (XSS PROOF)
+    // --- Elementos Atuais (Seguros) ---
     const btnFechar = document.createElement("button");
     btnFechar.className = "btn-fechar";
     btnFechar.textContent = "✕";
-    btnFechar.onclick = () =>
-      removerDaMemoria(local.latitude, local.longitude, card);
+    btnFechar.onclick = () => removerDaMemoria(local.latitude, local.longitude, card);
 
     const titulo = document.createElement("h2");
-    titulo.style.margin = "0";
-    titulo.textContent = local.name; // SEGURO: Mesmo que o nome seja um script, ele aparece como texto.
+    titulo.textContent = local.name;
 
     const pLocal = document.createElement("p");
     pLocal.className = "local-info";
-    pLocal.textContent = subLocal;
+    const estado = local.admin1 ? `${local.admin1}, ` : "";
+    pLocal.textContent = `${estado}${local.country}`;
 
     const divTemp = document.createElement("div");
     divTemp.className = "temp-grande";
     divTemp.style.color = config.color;
-    divTemp.textContent = `${converterValor(data.temperature)}°${unidadeAtual}`;
-
-    const divEmoji = document.createElement("div");
-    divEmoji.style.fontSize = "1.8rem";
-    divEmoji.style.margin = "15px 0";
-    divEmoji.textContent = emojiEstado;
+    divTemp.textContent = `${converterValor(current.temperature)}°${unidadeAtual}`;
 
     const pEstado = document.createElement("p");
     pEstado.style.fontWeight = "bold";
     pEstado.textContent = `${config.label} ${config.icon}`;
 
-    const pVento = document.createElement("p");
-    pVento.className = "vento-texto";
-    pVento.textContent = `Vento: ${data.windspeed} km/h`;
+    // --- NOVA SEÇÃO: PREVISÃO 3 DIAS ---
+    const divForecast = document.createElement("div");
+    divForecast.className = "forecast-container";
+    divForecast.style.display = "flex";
+    divForecast.style.justifyContent = "space-around";
+    divForecast.style.marginTop = "20px";
+    divForecast.style.paddingTop = "15px";
+    divForecast.style.borderTop = "1px solid rgba(255,255,255,0.1)";
 
-    // Montando o card (Append)
-    card.append(btnFechar, titulo, pLocal, divTemp, divEmoji, pEstado, pVento);
+    // Loop para os próximos 3 dias (começando de amanhã: índice 1, 2 e 3)
+    for (let i = 1; i <= 3; i++) {
+      const diaBox = document.createElement("div");
+      diaBox.style.fontSize = "0.85rem";
 
+      const dataObj = new Date(daily.time[i] + "T00:00");
+      const diaSemana = dataObj.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
+      
+      const diaLabel = document.createElement("div");
+      diaLabel.textContent = diaSemana.toUpperCase();
+      diaLabel.style.color = "#a8a8b3";
+
+      const iconPrevisao = weatherConfig[daily.weathercode[i]]?.icon || "🌤️";
+      const iconDiv = document.createElement("div");
+      iconDiv.textContent = iconPrevisao;
+      iconDiv.style.margin = "5px 0";
+
+      const tempPrev = document.createElement("div");
+      tempPrev.style.fontWeight = "bold";
+      tempPrev.textContent = `${converterValor(daily.temperature_2m_max[i])}°`;
+
+      diaBox.append(diaLabel, iconDiv, tempPrev);
+      divForecast.appendChild(diaBox);
+    }
+
+    // Montagem Final
+    card.append(btnFechar, titulo, pLocal, divTemp, pEstado, divForecast);
     container.appendChild(card);
     atualizarVisibilidadeControles();
   } catch (e) {
-    console.error("Erro ao carregar clima.");
+    console.error("Erro ao carregar clima para", local.name, e);
   }
 }
