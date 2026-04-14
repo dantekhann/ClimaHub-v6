@@ -1,195 +1,222 @@
 /* --- VARIÁVEIS E RESET --- */
 :root {
-    --destaque: #00d2ff;
-    --bg-card: rgba(255, 255, 255, 0.05);
-    --texto-secundario: #a8a8b3;
-    --cor-erro: #ff5555;
-    --bg-app: #0b0b0c;
+  --destaque: #00d2ff;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --texto-secundario: #a8a8b3;
+  --cor-erro: #ff5555;
+  --bg-app: #0b0b0c;
 }
 
 body {
-    background-color: var(--bg-app);
-    color: white;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    margin: 0;
+  background-color: var(--bg-app);
+  color: white;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 0;
 }
 
-#app { width: 100%; max-width: 1200px; text-align: center; }
+#app {
+  width: 100%;
+  max-width: 1200px;
+  text-align: center;
+}
 
-h1 { font-weight: 300; margin-bottom: 25px; }
+h1 {
+  font-weight: 300;
+  margin-bottom: 25px;
+}
 
 /* --- BUSCA E NOTIFICAÇÕES --- */
-.input-group { margin-bottom: 10px; }
-
-input {
-    padding: 12px 15px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    background: #1a1a1c;
-    color: white;
-    width: 250px;
-    outline: none;
-    transition: 0.3s;
+.input-group {
+  margin-bottom: 10px;
 }
 
-input:focus { border-color: var(--destaque); }
+input {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #1a1a1c;
+  color: white;
+  width: 250px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: var(--destaque);
+}
 
 #btnVerificar {
-    padding: 12px 25px;
-    border-radius: 8px;
-    border: none;
-    background: var(--destaque);
-    color: #000;
-    font-weight: bold;
-    cursor: pointer;
+  padding: 12px 25px;
+  border-radius: 8px;
+  border: none;
+  background: var(--destaque);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* --- LISTA DE SELEÇÃO (Autocomplete) --- */
 .lista-selecao {
-    background: #1a1a1c;
-    border-radius: 10px;
-    margin: 10px auto;
-    max-width: 450px;
-    border: 1px solid #333;
-    overflow: hidden;
+  background: #1a1a1c;
+  border-radius: 10px;
+  margin: 10px auto;
+  max-width: 450px;
+  border: 1px solid #333;
+  overflow: hidden;
 }
 
 .item-local {
-    padding: 15px;
-    border-bottom: 1px solid #333;
-    cursor: pointer;
-    text-align: left;
-    transition: 0.2s;
+  padding: 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.2s;
 }
 
-.item-local:last-child { border-bottom: none; }
+.item-local:last-child {
+  border-bottom: none;
+}
 
 .item-local:hover {
-    background: #2d2d30;
-    padding-left: 20px;
+  background: #2d2d30;
+  padding-left: 20px;
 }
 
 /* --- PAINEL DE CONTROLES (LADO A LADO) --- */
 #controles-painel {
-    display: none; /* Ativado via JS como flex */
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 15px 0;
+  display: none; /* Ativado via JS como flex */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
 }
 
-#btnAlternarUnidade, #btnLimparTudo {
-    padding: 8px 15px;
-    font-size: 0.75rem;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    font-weight: bold;
-    min-width: 140px;
-    transition: 0.3s;
+#btnAlternarUnidade,
+#btnLimparTudo {
+  padding: 8px 15px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  min-width: 140px;
+  transition: 0.3s;
 }
 
 #btnAlternarUnidade {
-    background: #1a1a1c;
-    color: var(--destaque);
-    border: 1px solid var(--destaque);
+  background: #1a1a1c;
+  color: var(--destaque);
+  border: 1px solid var(--destaque);
 }
 
 #btnAlternarUnidade:hover {
-    background: var(--destaque);
-    color: #000;
+  background: var(--destaque);
+  color: #000;
 }
 
-#btnLimparTudo { background: var(--cor-erro); color: white; }
-#btnLimparTudo:hover { filter: brightness(1.2); }
+#btnLimparTudo {
+  background: var(--cor-erro);
+  color: white;
+}
+#btnLimparTudo:hover {
+  filter: brightness(1.2);
+}
 
 /* --- GRID E CARDS --- */
 #weather-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .weather-box {
-    background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 18px;
-    padding: 40px 15px 25px 15px;
-    width: 260px;
-    min-height: 320px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    box-sizing: border-box;
-    animation: slideUp 0.4s ease-out;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 40px 15px 25px 15px;
+  width: 260px;
+  min-height: 320px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  animation: slideUp 0.4s ease-out;
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .btn-fechar {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: white;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    cursor: pointer;
-    transition: 0.3s;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .btn-fechar:hover {
-    background: var(--cor-erro);
-    transform: rotate(90deg);
+  background: var(--cor-erro);
+  transform: rotate(90deg);
 }
 
+/* No seu style.css */
 .weather-box h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    width: 100%;
-    line-height: 1.2;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita a no máximo 2 linhas antes de colocar ... */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word; /* Garante que palavras gigantes quebrem se necessário */
+  min-height: 3.2rem; /* Mantém uma altura mínima para alinhar os cards vizinhos */
+  line-height: 1.6rem;
+  margin-bottom: 5px;
 }
 
+/* Opcional: Ajuste para a info da localização logo abaixo */
 .local-info {
-    font-size: 0.85rem;
-    color: var(--texto-secundario);
-    margin-top: 5px;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-size: 0.9rem;
+  color: #a8a8b3;
 }
 
 .temp-grande {
-    font-size: 3.2rem;
-    font-weight: bold;
-    margin: 15px 0;
+  font-size: 3.2rem;
+  font-weight: bold;
+  margin: 15px 0;
 }
 
 .detalhes-clima {
-    font-size: 0.8rem;
-    color: var(--texto-secundario);
-    margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-top: 10px;
 }
