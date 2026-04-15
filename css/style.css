@@ -130,26 +130,120 @@ input:focus {
 #weather-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 10px;
+  gap: 10px; /* Espaçamento menor entre os cards */
+  justify-content: center; /* Centraliza o grid na tela */
+  padding: 15px;
+  max-width: 15 00px; /* Limita a largura total para não ficarem "sambando" em telas ultra-wide */
+  margin: 0 auto; /* Centraliza o container na página */
 }
 
+/* --- ESTILIZAÇÃO DO CARD (WEATHER BOX) --- */
 .weather-box {
-  background: var(--bg-card);
+  /* ... mantenha os efeitos de vidro (blur, background) ... */
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
-  padding: 40px 15px 25px 15px;
-  width: 260px;
+  border-radius: 12px;
+  border-top: 5px solid #555;
+
+  /* REDUÇÃO DE TAMANHO */
+  width: 220px; /* Reduzimos de 280px para 220px */
+  padding: 15px; /* Menos preenchimento interno para ganhar espaço */
   min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  transition:
+    background 0.6s ease,
+    border-color 0.6s ease,
+    transform 0.3s ease;
+}
+
+/* Ajustando as fontes para o novo tamanho menor */
+.weather-box h2 {
+  font-size: 1.1rem; /* Um pouco menor */
+  margin: 10px 0 2px 0;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+
+.temp-grande {
+  font-size: 2.2rem; /* Reduzido de 3rem para 2.2rem */
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+/* AJUSTE DO TÍTULO: Força a quebra de nomes gigantes */
+.weather-box h2 {
+  margin: 15px 0 5px 0;
+  font-size: 1.2rem; /* Diminuímos um pouco para nomes grandes */
+  width: 100%;
+
+  /* MÁGICA PARA NOMES GIGANTES: */
+  overflow-wrap: break-word; /* Quebra a palavra se não couber */
+  word-wrap: break-word;
+  hyphens: auto; /* Adiciona hífen se necessário */
+  line-height: 1.2;
+}
+
+.local-info {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.temp-grande {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 10px 0;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo do Botão Fechar Individual */
+.btn-fechar {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-fechar:hover {
+  color: #ff5555;
+}
+
+/* Container da Previsão de 3 Dias */
+.forecast-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.forecast-day {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  box-sizing: border-box;
-  animation: slideUp 0.4s ease-out;
+  font-size: 0.8rem;
+  gap: 5px;
+}
+
+.forecast-temp {
+  font-weight: bold;
+  opacity: 0.9;
 }
 
 @keyframes slideUp {
