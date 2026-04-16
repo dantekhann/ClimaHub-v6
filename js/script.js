@@ -1,11 +1,11 @@
 const weatherConfig = {
-  0: { label: "Céu Limpo", icon: "☀️", color: "#00d2ff" },
-  1: { label: "Quase Limpo", icon: "🌤️", color: "#00d2ff" },
-  2: { label: "Parcialmente Nublado", icon: "⛅", color: "#00d2ff" },
-  3: { label: "Nublado", icon: "☁️", color: "#00d2ff" },
-  45: { label: "Névoa", icon: "🌫️", color: "#a8a8b3" },
-  61: { label: "Chuva Fraca", icon: "🌧️", color: "#00d2ff" },
-  80: { label: "Pancadas", icon: "🌦️", color: "#00d2ff" },
+    0: { label: "Céu Limpo", icon: "☀️", color: "#ffce54" }, // Amarelo
+    1: { label: "Principalmente Limpo", icon: "🌤️", color: "#ffce54" },
+    2: { label: "Parcialmente Nublado", icon: "⛅", color: "#a8a8b3" }, // Cinza
+    3: { label: "Nublado", icon: "☁️", color: "#777777" },
+    45: { label: "Nevoeiro", icon: "🌫️", color: "#a8a8b3" },
+    61: { label: "Chuva Leve", icon: "🌧️", color: "#4a90e2" }, // Azul
+    95: { label: "Tempestade", icon: "⛈️", color: "#9b59b6" }, // Roxo
 };
 
 const EXPIRATION_TIME = 60 * 60 * 1000; // 1 Hora
@@ -179,78 +179,92 @@ function atualizarVisibilidadeControles() {
 
 // --- RENDERIZAÇÃO DO CARD ---
 // --- RENDERIZAÇÃO SEGURA DO CARD ---
+// --- RENDERIZAÇÃO SEGURA E COLORIDA DO CARD ---
 async function adicionarCardAoGrid(local) {
-  const container = document.getElementById("weather-container");
-  
-  // 1. Criamos o card IMEDIATAMENTE antes do try
-  const card = document.createElement("div");
-  card.className = "weather-box";
-  card.style.borderTop = `5px solid #555`; // Cor de carregamento
-  container.appendChild(card); 
-
-  try {
-    const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${local.latitude}&longitude=${local.longitude}&current_weather=true&daily=weathercode,temperature_2m_max&timezone=auto`
-    );
-
-    if (!res.ok) throw new Error("Falha na API");
+    const container = document.getElementById("weather-container");
     
-    const clm = await res.json();
-    const current = clm.current_weather;
-    const daily = clm.daily;
-
-    const config = weatherConfig[current.weathercode] || { label: "Estável", icon: "🌤️", color: "#00d2ff" };
-    const emojiEstado = current.is_day === 1 ? "☀️" : "🌙";
-
-    // 2. Limpamos o card e aplicamos o sucesso
-    card.innerHTML = ""; 
-    card.style.borderTop = `5px solid ${config.color}`;
-    card.setAttribute("data-temp-c", current.temperature);
-
-    const btnFechar = document.createElement("button");
-    btnFechar.className = "btn-fechar";
-    btnFechar.textContent = "✕";
-    btnFechar.onclick = () => removerDaMemoria(local.latitude, local.longitude, card);
-
-    const titulo = document.createElement("h2");
-    titulo.textContent = local.name;
-
-    const pLocal = document.createElement("p");
-    pLocal.className = "local-info";
-    pLocal.textContent = `${local.admin1 ? local.admin1 + ", " : ""}${local.country}`;
-
-    const divTemp = document.createElement("div");
-    divTemp.className = "temp-grande";
-    divTemp.style.color = config.color;
-    divTemp.textContent = `${converterValor(current.temperature)}°${unidadeAtual}`;
-
-    const pEstado = document.createElement("p");
-    pEstado.style.fontWeight = "bold";
-    pEstado.textContent = `${config.label} ${config.icon} ${emojiEstado}`;
-
-    // Chamamos a função auxiliar
-    const divForecast = criarElementoPrevisao(daily);
-
-    // 3. Montagem Final Segura
-    card.append(btnFechar, titulo, pLocal, divTemp, pEstado, divForecast);
-
-  } catch (e) {
-    // 4. Se der erro, o card vira um aviso de erro
-    console.error("Erro no fetch:", e);
-    card.style.borderTop = `5px solid #ff5555`;
+    // 1. Criamos o card IMEDIATAMENTE (Estado de Carregamento)
+    const card = document.createElement("div");
+    card.className = "weather-box";
+    card.style.borderTop = `5px solid #555`; // Cor cinza enquanto carrega
+    
+    // Conteúdo temporário (Skeleton)
     card.innerHTML = `
-      <button class="btn-fechar" onclick="this.parentElement.remove()">✕</button>
-      <h2 style="font-size: 1.1rem; margin-top: 20px;">${local.name}</h2>
-      <p style="color: #ff5555; font-size: 0.8rem; margin: 15px 0;">⚠️ Não foi possível carregar os dados.</p>
-      <button class="btn-tentar" style="background:#444; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer;">Tentar Novamente</button>
+        <div style="margin-top: 40%; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <p style="font-size: 0.8rem; opacity: 0.6;">Buscando clima...</p>
+        </div>
     `;
     
-    card.querySelector(".btn-tentar").onclick = () => {
-      card.remove();
-      adicionarCardAoGrid(local);
-    };
-  }
-  atualizarVisibilidadeControles();
+    container.appendChild(card); 
+
+    try {
+        const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${local.latitude}&longitude=${local.longitude}&current_weather=true&daily=weathercode,temperature_2m_max&timezone=auto`
+        );
+
+        if (!res.ok) throw new Error("Falha na API");
+        
+        const clm = await res.json();
+        const current = clm.current_weather;
+        const daily = clm.daily;
+
+        // DEFINIÇÃO DA CONFIGURAÇÃO (Aqui pegamos a cor correta)
+        const config = weatherConfig[current.weathercode] || { label: "Estável", icon: "🌤️", color: "#00d2ff" };
+        const emojiEstado = current.is_day === 1 ? "☀️" : "🌙";
+
+        // 2. Paramos a animação e aplicamos as cores dinâmicas
+        card.classList.add("loaded");
+        card.innerHTML = ""; // Limpa o "Buscando clima..."
+        
+        // Aplica a borda e o gradiente dinâmico baseado na cor do clima
+        card.style.borderTop = `5px solid ${config.color}`;
+        card.style.background = `linear-gradient(135deg, ${config.color}22 0%, rgba(11, 11, 12, 0.8) 100%)`;
+        card.setAttribute("data-temp-c", current.temperature);
+
+        // 3. Montagem dos elementos internos
+        const btnFechar = document.createElement("button");
+        btnFechar.className = "btn-fechar";
+        btnFechar.textContent = "✕";
+        btnFechar.onclick = () => removerDaMemoria(local.latitude, local.longitude, card);
+
+        const titulo = document.createElement("h2");
+        titulo.textContent = local.name;
+
+        const pLocal = document.createElement("p");
+        pLocal.className = "local-info";
+        pLocal.textContent = `${local.admin1 ? local.admin1 + ", " : ""}${local.country}`;
+
+        const divTemp = document.createElement("div");
+        divTemp.className = "temp-grande";
+        divTemp.style.color = config.color; // A temperatura também ganha a cor do clima
+        divTemp.textContent = `${converterValor(current.temperature)}°${unidadeAtual}`;
+
+        const pEstado = document.createElement("p");
+        pEstado.style.fontWeight = "bold";
+        pEstado.textContent = `${config.label} ${config.icon} ${emojiEstado}`;
+
+        const divForecast = criarElementoPrevisao(daily);
+
+        // 4. Inserção Final
+        card.append(btnFechar, titulo, pLocal, divTemp, pEstado, divForecast);
+
+    } catch (e) {
+        console.error("Erro no fetch:", e);
+        card.classList.add("loaded");
+        card.style.borderTop = `5px solid #ff5555`;
+        card.innerHTML = `
+            <button class="btn-fechar" onclick="this.parentElement.remove()">✕</button>
+            <h2 style="font-size: 1.1rem; margin-top: 20px;">${local.name}</h2>
+            <p style="color: #ff5555; font-size: 0.8rem; margin: 15px 0;">⚠️ Erro ao carregar dados.</p>
+            <button class="btn-tentar" style="background:#444; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer;">Tentar Novamente</button>
+        `;
+        
+        card.querySelector(".btn-tentar").onclick = () => {
+            card.remove();
+            adicionarCardAoGrid(local);
+        };
+    }
+    atualizarVisibilidadeControles();
 }
 
 // --- FUNÇÃO AUXILIAR: PREVISÃO 3 DIAS ---
