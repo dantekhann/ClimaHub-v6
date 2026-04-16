@@ -22,25 +22,40 @@
 
       <div id="notificacao-container"></div>
 
-      <div id="controles-painel" style="display: none">
-        <button id="btnAlternarUnidade" onclick="alternarUnidade()">
+      <div id="controles-painel" class="controles-painel" style="display: none">
+        <button
+          id="btnAlternarUnidade"
+          onclick="alternarUnidade()"
+          class="btn-acao"
+        >
           Mudar para °F
         </button>
-        <button id="btnLimparTudo" onclick="limparTodaMemoria()">
+        <button
+          id="btnLimparTudo"
+          onclick="limparTodaMemoria()"
+          class="btn-acao danger"
+        >
           Limpar Painel
         </button>
       </div>
 
+      <div id="empty-state" class="empty-state">
+        <div class="cloud-icon">☁️</div>
+        <h2>ClimaHub</h2>
+        <p>Busque uma cidade para começar.</p>
+      </div>
+
       <div id="weather-container"></div>
+
       <footer>
         <p>
           Dados meteorológicos fornecidos por
           <a href="https://open-meteo.com/" target="_blank">Open-Meteo.com</a>
         </p>
         <p>
-          Interface desenvolvida por Paulo Dante
+          Interface desenvolvida por <strong>Paulo Dante</strong><br />
           <a href="https://github.com/dantekhann" target="_blank"
-            >https://github.com/dantekhann</a
+            >github.com/dantekhann</a
           >
         </p>
       </footer>

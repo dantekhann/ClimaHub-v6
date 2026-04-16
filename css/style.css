@@ -139,34 +139,46 @@ input:focus {
 
 /* --- ESTILIZAÇÃO DO CARD (WEATHER BOX) --- */
 .weather-box {
-    /* ... mantenha suas configurações de vidro e bordas ... */
-    width: 220px;
-    padding: 15px;
-    min-height: 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    color: white;
-    text-align: center;
-    transition: background 0.6s ease, border-color 0.6s ease, transform 0.3s ease;
-    
-    /* ESTADO INICIAL: Animação de carregamento */
-    animation: pulsarLoading 1.5s infinite ease-in-out;
+  /* ... mantenha suas configurações de vidro e bordas ... */
+  width: 220px;
+  padding: 15px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  transition:
+    background 0.6s ease,
+    border-color 0.6s ease,
+    transform 0.3s ease;
+
+  /* ESTADO INICIAL: Animação de carregamento */
+  animation: pulsarLoading 1.5s infinite ease-in-out;
 }
 
 /* Define a animação de pulsação suave */
 @keyframes pulsarLoading {
-    0% { opacity: 0.6; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0.6; transform: scale(0.98); }
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
 }
 
 /* Remove a animação quando o card carregar (via JS) */
 .weather-box.loaded {
-    animation: none;
+  animation: none;
 }
 
 /* Ajustando as fontes para o novo tamanho menor */
@@ -365,4 +377,72 @@ footer a:hover {
 .forecast-temp {
   font-weight: bold;
   font-size: 0.9rem;
+}
+/* --- ESTILO DA TELA INICIAL (EMPTY STATE) --- */
+/* --- ESTILO DA TELA INICIAL (EMPTY STATE COLORIDO) --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+.cloud-icon {
+  font-size: 7rem; /* Aumentamos um pouco para dar destaque */
+  margin-bottom: 25px;
+
+  /* MÁGICA DO GRADIENTE NA NUVEM: */
+  background: linear-gradient(135deg, #ffffff 0%, #abe9f4 50%, #81d4fa 100%);
+  -webkit-background-clip: text; /* Aplica o gradiente apenas no texto/emoji */
+  -webkit-text-fill-color: transparent; /* Deixa o emoji original transparente */
+
+  /* EFEITO DE BRILHO NEON (Glow): */
+  filter: drop-shadow(0 0 15px rgba(129, 212, 250, 0.4));
+
+  /* Animação e Interação */
+  animation: flutuarColorida 4s ease-in-out infinite;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+/* Efeito ao passar o mouse na nuvem */
+.cloud-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 0 25px rgba(129, 212, 250, 0.6));
+}
+
+.empty-state h2 {
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  /* Texto em degradê suave também */
+  background: linear-gradient(to right, #ffffff, #81d4fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  max-width: 320px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6); /* Texto de apoio mais visível */
+}
+
+/* Animação para a nuvem flutuar suavemente */
+@keyframes flutuarColorida {
+  0%,
+  100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 15px rgba(129, 212, 250, 0.4));
+  }
+  50% {
+    transform: translateY(-20px);
+    filter: drop-shadow(
+      0 0 25px rgba(129, 212, 250, 0.6)
+    ); /* Brilha mais no topo */
+  }
 }
